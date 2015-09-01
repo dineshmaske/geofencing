@@ -7,6 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHandler extends SQLiteOpenHelper{
 
 	
@@ -78,7 +81,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         SharedPreferences pref = context.getApplicationContext().getSharedPreferences("RTAPrefs", 0); // 0
         SharedPreferences.Editor editor = pref.edit();
         editor.clear();
-        editor.apply();
+        editor.commit();
     }
 
     /**
@@ -89,9 +92,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     	
     	SQLiteDatabase db = this.getReadableDatabase();
     	 
-        Cursor cursor = db.query(TABLE_GEOFENCE, new String[] { _ID,
-        		LATITUDE, LONGITUDE, LOCATION_NAME, ADDRESS, RADIUS, EXPRIATION_DURATION, TRANSITION_TYPE}, _ID + "=?",
-                new String[] { id }, null, null, null, null);
+        Cursor cursor = db.query(TABLE_GEOFENCE, new String[]{_ID,
+                        LATITUDE, LONGITUDE, LOCATION_NAME, ADDRESS, RADIUS, EXPRIATION_DURATION, TRANSITION_TYPE}, _ID + "=?",
+                new String[]{id}, null, null, null, null);
 
         if (cursor != null && cursor.moveToNext() ){
 
@@ -115,7 +118,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 		return null;
     }
     
-    public void setGeofence(String address, SimpleGeofence geofence) {
+    public void setGeofence(SimpleGeofence geofence) {
     	
     	SQLiteDatabase db = this.getWritableDatabase();
     	 
@@ -124,7 +127,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(LATITUDE, geofence.getLatitude());
         values.put(LONGITUDE, geofence.getLongitude()); 
         values.put(LOCATION_NAME, geofence.getName());
-        values.put(ADDRESS, address);
+        values.put(ADDRESS, geofence.getAddress());
         values.put(RADIUS, geofence.getRadius()); 
         values.put(EXPRIATION_DURATION, geofence.getExpirationDuration()); 
         values.put(TRANSITION_TYPE, geofence.getTransitionType()); 
@@ -142,7 +145,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     	
     	SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_GEOFENCE, _ID + " = ?",
-                new String[] { id });
+                new String[]{id});
         db.close();
 
     }
@@ -163,13 +166,44 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         return db.update(TABLE_GEOFENCE, values, _ID + " = ?",
                 new String[] { id });
 	}
+
+    public List<SimpleGeofence> getGeofences() {
+
+        List<SimpleGeofence> simpleGeofences = new ArrayList<>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_GEOFENCE;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                SimpleGeofence simpleGeofence = new SimpleGeofence();
+
+                simpleGeofence.setId(cursor.getLong(0));
+                simpleGeofence.setLatitude(cursor.getDouble(1));
+                simpleGeofence.setLongitude(cursor.getDouble(2));
+                simpleGeofence.setName(cursor.getString(3));
+                simpleGeofence.setAddress(cursor.getString(4));
+                simpleGeofence.setRadius(cursor.getFloat(5));
+                simpleGeofence.setExpirationDuration(cursor.getLong(6));
+                simpleGeofence.setTransitionType(cursor.getInt(7));
+                // Adding contact to list
+                simpleGeofences.add(simpleGeofence);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        // return contact list
+        return simpleGeofences;
+    }
     
     public void deleteAll() {
     	
         SQLiteDatabase db = this.getWritableDatabase();
-       
         db.execSQL("delete from "+ TABLE_GEOFENCE);
-
         db.close();
     }
     

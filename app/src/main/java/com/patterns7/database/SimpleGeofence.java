@@ -30,7 +30,21 @@ public class SimpleGeofence {
     private float radius;
     private long expirationDuration;
     private int transitionType;
-    
+
+    @Override
+    public String toString() {
+        return "SimpleGeofence{" +
+                "id=" + id +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", radius=" + radius +
+                ", expirationDuration=" + expirationDuration +
+                ", transitionType=" + transitionType +
+                '}';
+    }
+
     /**
      * Get the geofence ID
      * @return A SimpleGeofence ID

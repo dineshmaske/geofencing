@@ -19,7 +19,7 @@
         android:textSize="20sp"
         android:singleLine="true"
         android:background="#ffffff"
-        android:inputType="numberSigned"/>
+        android:inputType="numberDecimal|numberSigned"/>
     <EditText
         android:id="@+id/textLongitude"
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
         android:singleLine="true"
         android:background="#ffffff"
         android:layout_below="@id/textLatitude"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal|numberSigned"/>
     <EditText
         android:id="@+id/textName"
         android:layout_width="match_parent"

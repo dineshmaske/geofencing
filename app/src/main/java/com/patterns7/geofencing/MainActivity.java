@@ -8,12 +8,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.patterns7.database.DatabaseHandler;
+import com.patterns7.database.SimpleGeofence;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        DatabaseHandler db = new DatabaseHandler(this);
+        List<SimpleGeofence> geofences = db.getGeofences();
+
+        for(SimpleGeofence geofence : geofences){
+            Log.d("Patterns", geofence.toString());
+        }
     }
 
     public void openRegisterPage(View view){
