@@ -4,4 +4,12 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_add_geofencing">AddGeofencingActivity</string>
+
+    <string name="dashboard_content_description_menu">Menu</string>
+    <string name="add_geofence_title">Add New</string>
+
+    <string name="company_name">Patterns7 Tech</string>
+
+    <string name="empty_geofence_message">No geofences added on device. To add new geofence please click on plus icon.</string>
+
 </resources>

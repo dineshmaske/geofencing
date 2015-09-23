@@ -1,20 +1,18 @@
 package com.patterns7.geofencing;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.patterns7.database.DatabaseHandler;
 import com.patterns7.database.SimpleGeofence;
 import com.google.android.gms.location.Geofence;
 
-public class AddGeofencingActivity extends AppCompatActivity {
+public class AddGeofencingActivity extends Activity {
 
     private EditText latitudeEditText;
     private EditText longitudeEditText;
@@ -31,6 +29,7 @@ public class AddGeofencingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add_geofencing);
 
         latitudeEditText = (EditText) findViewById(R.id.textLatitude);
@@ -39,28 +38,6 @@ public class AddGeofencingActivity extends AppCompatActivity {
         addressEditText = (EditText) findViewById(R.id.textAddress);
         radiosEditText = (EditText) findViewById(R.id.textRedious);
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_geofencing, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void saveGeofence(View view){
@@ -129,5 +106,9 @@ public class AddGeofencingActivity extends AppCompatActivity {
                 nameEditText.setError(null);
             }
         }
+    }
+
+    public void back(View view){
+        finish();
     }
 }
