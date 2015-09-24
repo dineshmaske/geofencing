@@ -161,6 +161,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(LATITUDE, geofence.getLatitude());
         values.put(LONGITUDE, geofence.getLongitude()); 
         values.put(LOCATION_NAME, geofence.getName());
+        values.put(ADDRESS, geofence.getAddress());
         values.put(RADIUS, geofence.getRadius()); 
         values.put(EXPRIATION_DURATION, geofence.getExpirationDuration()); 
         values.put(TRANSITION_TYPE, geofence.getTransitionType());

@@ -46,7 +46,7 @@ public class GeofencingDetailsActivity extends Activity {
                 geofencingNameView.setText("Name : "+geofence.getName());
                 geofencingAddressView.setText("Address : "+geofence.getAddress());
                 geofencingLatitudeView.setText("Latitude : "+geofence.getLatitude());
-                geofencingLongitudeView.setText("Longitude : "+geofence.getLatitude());
+                geofencingLongitudeView.setText("Longitude : "+geofence.getLongitude());
                 geofencingRediousView.setText("Radios : "+geofence.getRadius()+" Meters");
             }
         }

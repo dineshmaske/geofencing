@@ -190,7 +190,7 @@ public class AddGeofencingActivity extends Activity implements
                 if(status.equals("UPDATE")){
 
                     if(geofence != null){
-                        geofence.setGeofenceId(String.valueOf(System.currentTimeMillis()));
+
                         geofence.setLatitude(latitude);
                         geofence.setLongitude(longitude);
                         geofence.setName(name);
@@ -202,9 +202,9 @@ public class AddGeofencingActivity extends Activity implements
                         updateGeofence(geofence);
                     }
 
-                }else {
+                } else {
                     SimpleGeofence simpleGeofence = new SimpleGeofence();
-                    simpleGeofence.setGeofenceId(String.valueOf(System.currentTimeMillis()));
+                    simpleGeofence.setGeofenceId("Patterns7"+System.currentTimeMillis());
                     simpleGeofence.setLatitude(latitude);
                     simpleGeofence.setLongitude(longitude);
                     simpleGeofence.setName(name);
