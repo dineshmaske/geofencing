@@ -152,22 +152,21 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     }
     
-    public int updateGeofence(String id, SimpleGeofence geofence) {
+    public int updateGeofence(SimpleGeofence geofence) {
 		
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
 
-        values.put(GEOFENCE_ID, geofence.getGeofenceId());
-		values.put(LATITUDE, geofence.getLatitude());
+        values.put(LATITUDE, geofence.getLatitude());
         values.put(LONGITUDE, geofence.getLongitude()); 
         values.put(LOCATION_NAME, geofence.getName());
         values.put(RADIUS, geofence.getRadius()); 
         values.put(EXPRIATION_DURATION, geofence.getExpirationDuration()); 
         values.put(TRANSITION_TYPE, geofence.getTransitionType());
         
-        return db.update(TABLE_GEOFENCE, values, _ID + " = ?",
-                new String[] { id });
+        return db.update(TABLE_GEOFENCE, values, GEOFENCE_ID + " = ?",
+                new String[] { geofence.getGeofenceId() });
 	}
 
     public ArrayList<SimpleGeofence> getGeofences() {

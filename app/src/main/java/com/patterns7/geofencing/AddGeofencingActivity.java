@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.common.ConnectionResult;
@@ -18,11 +19,8 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.GeofencingApi;
-import com.google.android.gms.maps.model.LatLng;
 import com.patterns7.services.GeofenceTransitionsIntentService;
 
 import java.util.ArrayList;
@@ -37,6 +35,7 @@ public class AddGeofencingActivity extends Activity implements
     private EditText nameEditText;
     private EditText addressEditText;
     private EditText radiosEditText;
+    private ImageView deleteGeofence;
 
     private static final long SECONDS_PER_HOUR = 60;
     private static final long MILLISECONDS_PER_SECOND = 1000;
@@ -58,14 +57,14 @@ public class AddGeofencingActivity extends Activity implements
     protected List<String> removeGeofenceList;
 
     /**
-     * Used to keep track of whether geofences were added.
-     */
-    private boolean mGeofencesAdded;
-
-    /**
      * Used when requesting to add or remove geofences.
      */
     private PendingIntent mGeofencePendingIntent;
+
+    private Intent intent;
+    private String geofenceId = "";
+    private String status = "CREATE";
+    SimpleGeofence geofence;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +77,9 @@ public class AddGeofencingActivity extends Activity implements
         nameEditText = (EditText) findViewById(R.id.textName);
         addressEditText = (EditText) findViewById(R.id.textAddress);
         radiosEditText = (EditText) findViewById(R.id.textRedious);
+        deleteGeofence = (ImageView) findViewById(R.id.deleteGeofence);
+
+
 
         // Empty list for storing geofences.
         mGeofenceList = new ArrayList<Geofence>();
@@ -85,9 +87,28 @@ public class AddGeofencingActivity extends Activity implements
         // Initially set the PendingIntent used in addGeofences() and removeGeofences() to null.
         mGeofencePendingIntent = null;
 
-
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
+
+        intent = getIntent();
+        savedInstanceState = intent.getExtras();
+        status = savedInstanceState.getString("status", "CREATE");
+        geofenceId = savedInstanceState.getString("geofenceId");
+        if(status.equals("UPDATE")){
+            if(geofenceId != null && !geofenceId.isEmpty()){
+                DatabaseHandler provider = new DatabaseHandler(this);
+                geofence = provider.getGeofence(geofenceId);
+                if(geofence != null){
+                    latitudeEditText.setText(String.valueOf(geofence.getLatitude()));
+                    longitudeEditText.setText(String.valueOf(geofence.getLongitude()));
+                    nameEditText.setText(geofence.getName());
+                    addressEditText.setText(geofence.getAddress());
+                    radiosEditText.setText(String.valueOf(geofence.getRadius()));
+
+                    deleteGeofence.setVisibility(View.VISIBLE);
+                }
+            }
+        }
 
     }
 
@@ -166,20 +187,36 @@ public class AddGeofencingActivity extends Activity implements
 
             if (latitude != null && longitude != null && !name.isEmpty()) {
 
+                if(status.equals("UPDATE")){
 
-                SimpleGeofence simpleGeofence = new SimpleGeofence();
-                simpleGeofence.setGeofenceId(String.valueOf(System.currentTimeMillis()));
-                simpleGeofence.setLatitude(latitude);
-                simpleGeofence.setLongitude(longitude);
-                simpleGeofence.setName(name);
-                simpleGeofence.setAddress(address);
-                simpleGeofence.setRadius(radios);
-                simpleGeofence.setExpirationDuration(GEOFENCE_EXPIRATION_TIME);
-                simpleGeofence.setTransitionType(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT);
+                    if(geofence != null){
+                        geofence.setGeofenceId(String.valueOf(System.currentTimeMillis()));
+                        geofence.setLatitude(latitude);
+                        geofence.setLongitude(longitude);
+                        geofence.setName(name);
+                        geofence.setAddress(address);
+                        geofence.setRadius(radios);
+                        geofence.setExpirationDuration(GEOFENCE_EXPIRATION_TIME);
+                        geofence.setTransitionType(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT);
 
-                createGeofences(simpleGeofence);
+                        updateGeofence(geofence);
+                    }
 
-                Toast.makeText(this, "Geofence added successfully in table", Toast.LENGTH_LONG).show();
+                }else {
+                    SimpleGeofence simpleGeofence = new SimpleGeofence();
+                    simpleGeofence.setGeofenceId(String.valueOf(System.currentTimeMillis()));
+                    simpleGeofence.setLatitude(latitude);
+                    simpleGeofence.setLongitude(longitude);
+                    simpleGeofence.setName(name);
+                    simpleGeofence.setAddress(address);
+                    simpleGeofence.setRadius(radios);
+                    simpleGeofence.setExpirationDuration(GEOFENCE_EXPIRATION_TIME);
+                    simpleGeofence.setTransitionType(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT);
+
+                    createGeofences(simpleGeofence);
+                }
+
+                Toast.makeText(this, "Geofence updated in table", Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
@@ -225,8 +262,7 @@ public class AddGeofencingActivity extends Activity implements
             // Update state and save in shared preferences.
             Toast.makeText(
                     this,
-                    getString(mGeofencesAdded ? R.string.geofences_added :
-                            R.string.geofences_removed),
+                    "Operation successfully completed",
                     Toast.LENGTH_SHORT
             ).show();
         } else {
@@ -237,6 +273,37 @@ public class AddGeofencingActivity extends Activity implements
         }
     }
 
+
+    public void updateGeofence(SimpleGeofence simpleGeofence) {
+
+        DatabaseHandler db = new DatabaseHandler(this);
+        db.updateGeofence(simpleGeofence);
+
+        removeGeofencesById(simpleGeofence.getGeofenceId());
+
+        mGeofenceList = new ArrayList<>();
+        mGeofenceList.add(simpleGeofence.toGeofence());
+
+        if (!mGoogleApiClient.isConnected()) {
+            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        try {
+            LocationServices.GeofencingApi.addGeofences(
+                    mGoogleApiClient,
+                    // The GeofenceRequest object.
+                    getGeofencingRequest(),
+                    // A pending intent that that is reused when calling removeGeofences(). This
+                    // pending intent is used to generate an intent when a matched geofence
+                    // transition is observed.
+                    getGeofencePendingIntent()
+            ).setResultCallback(this); // Result processed in onResult().
+        } catch (SecurityException securityException) {
+            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
+            logSecurityException(securityException);
+        }
+    }
 
     /**
      * In this sample, the geofences are predetermined and are hard-coded here. A real app might
@@ -333,5 +400,19 @@ public class AddGeofencingActivity extends Activity implements
             logSecurityException(securityException);
         }
     }
+
+    public void deleteGeofence(View view){
+        DatabaseHandler db = new DatabaseHandler(this);
+        db.clearGeofence(geofenceId);
+
+        removeGeofencesById(geofenceId);
+
+        Toast.makeText(this, "Geofence remove successfully", Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 
 }

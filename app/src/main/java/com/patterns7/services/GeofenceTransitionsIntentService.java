@@ -19,6 +19,7 @@ import com.google.android.gms.location.GeofencingEvent;
 import com.patterns7.database.DatabaseHandler;
 import com.patterns7.database.SimpleGeofence;
 import com.patterns7.geofencing.GeofenceErrorMessages;
+import com.patterns7.geofencing.GeofencingDetailsActivity;
 import com.patterns7.geofencing.MainActivity;
 import com.patterns7.geofencing.R;
 
@@ -104,13 +105,14 @@ public class GeofenceTransitionsIntentService extends IntentService {
             }
 
             // Create an explicit content Intent that starts the main Activity
-            Intent notificationIntent = new Intent(this, MainActivity.class);
+            Intent notificationIntent = new Intent(this, GeofencingDetailsActivity.class);
+            notificationIntent.putExtra("geofenceId", geofence.getRequestId());
 
             // Construct a task stack
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
             // Adds the main Activity to the task stack as the parent
-            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addParentStack(GeofencingDetailsActivity.class);
 
             // Push the content Intent onto the stack
             stackBuilder.addNextIntent(notificationIntent);

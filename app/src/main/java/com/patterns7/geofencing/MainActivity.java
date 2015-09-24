@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.patterns7.adaptor.GeofencingAdaptor;
@@ -20,6 +21,7 @@ public class MainActivity extends Activity {
     TextView errorMessageView;
 
     GeofencingAdaptor adapter;
+    ArrayList<SimpleGeofence> geofences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +33,14 @@ public class MainActivity extends Activity {
         errorMessageView = (TextView)findViewById(R.id.error_message);
 
         DatabaseHandler db = new DatabaseHandler(this);
-        ArrayList<SimpleGeofence> geofences = db.getGeofences();
+        geofences = db.getGeofences();
         if(geofences.size() > 0) {
             errorMessageView.setVisibility(View.GONE);
 
             // set up the drawer's list view with items and click listener
             adapter = new GeofencingAdaptor(this, R.layout.geofence_list_item, geofences);
             geofenceListView.setAdapter(adapter);
+            geofenceListView.setOnItemClickListener(new GeofencingListItemClickListener());
 
         } else {
             errorMessageView.setVisibility(View.VISIBLE);
@@ -45,8 +48,30 @@ public class MainActivity extends Activity {
     }
 
     public void openRegisterPage(View view){
+
         Intent intent = new Intent(this, AddGeofencingActivity.class);
+        intent.putExtra("status", "CREATE");
+        intent.putExtra("geofenceId", "");
         startActivity(intent);
+    }
+
+    /* The click listner for ListView in the navigation drawer */
+    private class GeofencingListItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private void selectItem(int position) {
+
+        if(geofences.size() >0 ) {
+            SimpleGeofence geofence = geofences.get(position);
+            Intent intent = new Intent(this, GeofencingDetailsActivity.class);
+            intent.putExtra("geofenceId", geofence.getGeofenceId());
+            startActivity(intent);
+        }
+
     }
 
 }
