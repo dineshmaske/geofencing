@@ -1,0 +1,97 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/slidingPanel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".GeofencingDetailsActivity">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#00b4d0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="80dp"
+            android:textColor="#ffffff"
+            android:text="@string/company_name"
+            android:textSize="@dimen/abc_text_size_large_material"/>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:clickable="true"
+            android:onClick="updateGeofencingDetails"
+            android:contentDescription="@string/dashboard_content_description_menu"
+            android:src="@mipmap/icon_add_event"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/menuViewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:clickable="true"
+            android:onClick="back"
+            android:contentDescription="@string/dashboard_content_description_menu"
+            android:src="@mipmap/icon_back_arrow_6"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/geofencingNameView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            />
+
+        <TextView
+            android:id="@+id/geofencingAddressView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            />
+
+        <TextView
+            android:id="@+id/geofencingLatitudeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            />
+
+        <TextView
+            android:id="@+id/geofencingLongitudeView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            />
+
+        <TextView
+            android:id="@+id/geofencingRediousView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            />
+
+    </LinearLayout>
+</LinearLayout>

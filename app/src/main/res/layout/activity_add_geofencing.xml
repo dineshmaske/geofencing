@@ -26,8 +26,8 @@
             android:textSize="@dimen/abc_text_size_large_material"/>
 
 
-        <!--<ImageView
-            android:id="@+id/regiterButton"
+        <ImageView
+            android:id="@+id/deleteGeofence"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -35,10 +35,10 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:clickable="true"
-            android:onClick="openRegisterPage"
+            android:onClick="deleteGeofence"
             android:contentDescription="@string/dashboard_content_description_menu"
-            android:src="@mipmap/icon_pluse_white"
-            android:visibility="visible" />-->
+            android:src="@mipmap/icon_delete_white"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/menuViewButton"
@@ -126,7 +126,7 @@
             android:layout_marginTop="16dp"
             android:editable="true"
             android:paddingLeft="10dp"
-            android:hint="Redious"
+            android:hint="Redious in meter"
             android:textSize="20sp"
             android:singleLine="true"
             android:layout_below="@id/textAddress"
