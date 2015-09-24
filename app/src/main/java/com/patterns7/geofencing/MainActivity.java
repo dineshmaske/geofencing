@@ -10,8 +10,9 @@ import android.widget.TextView;
 import com.patterns7.adaptor.GeofencingAdaptor;
 import com.patterns7.database.DatabaseHandler;
 import com.patterns7.database.SimpleGeofence;
+
+import java.util.ArrayList;
 import java.util.List;
-import com.patterns7.geofencing.R;
 
 public class MainActivity extends Activity {
 
@@ -30,13 +31,12 @@ public class MainActivity extends Activity {
         errorMessageView = (TextView)findViewById(R.id.error_message);
 
         DatabaseHandler db = new DatabaseHandler(this);
-        List<SimpleGeofence> geofences = db.getGeofences();
-
+        ArrayList<SimpleGeofence> geofences = db.getGeofences();
         if(geofences.size() > 0) {
             errorMessageView.setVisibility(View.GONE);
 
             // set up the drawer's list view with items and click listener
-            adapter = new GeofencingAdaptor(MainActivity.this, R.layout.geofence_list_item, geofences);
+            adapter = new GeofencingAdaptor(this, R.layout.geofence_list_item, geofences);
             geofenceListView.setAdapter(adapter);
 
         } else {

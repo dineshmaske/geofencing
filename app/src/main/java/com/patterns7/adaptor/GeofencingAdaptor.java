@@ -43,9 +43,13 @@ public class GeofencingAdaptor extends ArrayAdapter<SimpleGeofence> {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = vi.inflate(R.layout.geofence_list_item, null);
 
-            name = (TextView) convertView.findViewById(R.id.title_key);
-            address = (TextView) convertView.findViewById(R.id.value_text_view);
-            latlong = (TextView) convertView.findViewById(R.id.value_text_view);
+            name = (TextView) convertView.findViewById(R.id.nameTextView);
+            address = (TextView) convertView.findViewById(R.id.addressTextView);
+            latlong = (TextView) convertView.findViewById(R.id.latLongTextView);
+
+            name.setText(simpleGeofence.getName());
+            address.setText(simpleGeofence.getAddress());
+            latlong.setText(simpleGeofence.getLatitude()+" "+simpleGeofence.getLongitude());
         }
 
         return convertView;

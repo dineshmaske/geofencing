@@ -74,7 +74,6 @@
             android:hint="Latitude"
             android:textSize="20sp"
             android:singleLine="true"
-            android:background="#ffffff"
             android:inputType="numberDecimal|numberSigned"/>
         <EditText
             android:id="@+id/textLongitude"
@@ -88,7 +87,6 @@
             android:hint="Longitude"
             android:textSize="20sp"
             android:singleLine="true"
-            android:background="#ffffff"
             android:layout_below="@id/textLatitude"
             android:inputType="numberDecimal|numberSigned"/>
         <EditText
@@ -103,7 +101,6 @@
             android:hint="Name"
             android:textSize="20sp"
             android:singleLine="true"
-            android:background="#ffffff"
             android:layout_below="@id/textLongitude"
             android:inputType="text"/>
         <EditText
@@ -118,7 +115,6 @@
             android:hint="Address"
             android:textSize="20sp"
             android:singleLine="true"
-            android:background="#ffffff"
             android:layout_below="@id/textName"
             android:inputType="text"/>
         <EditText
@@ -133,7 +129,6 @@
             android:hint="Redious"
             android:textSize="20sp"
             android:singleLine="true"
-            android:background="#ffffff"
             android:layout_below="@id/textAddress"
             android:inputType="numberDecimal"/>
 

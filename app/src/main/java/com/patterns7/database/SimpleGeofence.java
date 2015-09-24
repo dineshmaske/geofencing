@@ -25,11 +25,20 @@ public class SimpleGeofence {
     private long id;
     private double latitude;
     private double longitude;
+    private String geofenceId;
     private String name;
     private String address;
     private float radius;
     private long expirationDuration;
     private int transitionType;
+
+    public String getGeofenceId() {
+        return geofenceId;
+    }
+
+    public void setGeofenceId(String geofenceId) {
+        this.geofenceId = geofenceId;
+    }
 
     @Override
     public String toString() {
@@ -137,13 +146,13 @@ public class SimpleGeofence {
      * @return A Geofence object
      */
     public Geofence toGeofence() {
-        // Build a new Geofence object
+        // Build a new Geofence object.
         return new Geofence.Builder()
-                       .setRequestId(Long.toString(id))
-                       .setTransitionTypes(transitionType)
-                       .setCircularRegion(latitude, longitude, radius)
-                       .setExpirationDuration(expirationDuration)
-                       .build();
+                .setRequestId(geofenceId)
+                .setTransitionTypes(transitionType)
+                .setCircularRegion(latitude, longitude, radius)
+                .setExpirationDuration(expirationDuration)
+                .build();
     }
 
 }
